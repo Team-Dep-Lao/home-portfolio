@@ -63,9 +63,12 @@ export default function Header() {
           {items.map((item, idx) => (
             <Link
               href={item.link}
-              className="rounded-md hover:shadow-md hover:text-gray-400 p-4"
+              className={cn([
+                "rounded-md hover:shadow-md hover:text-gray-400 p-4",
+                !isAtTop ? "text-black" : "text-white",
+              ])}
               key={idx}
-              scrollBehavior={'smooth'}
+              scrollBehavior={"smooth"}
             >
               {item.label}
             </Link>
@@ -81,7 +84,9 @@ export default function Header() {
                 isAtTop ? "border-white" : "border-black",
               ])}
             >
-              <social.icon className={cn([isAtTop ? "stroke-white": " stroke-black"])} />
+              <social.icon
+                className={cn([isAtTop ? "stroke-white" : " stroke-black"])}
+              />
             </Link>
           ))}
         </div>
@@ -98,7 +103,7 @@ export default function Header() {
         <ActionBarContent>
           {items.map((item, idx) => (
             <Fragment key={idx}>
-              <Link href={item.link} scrollBehavior={'smooth'}>
+              <Link href={item.link} scrollBehavior={"smooth"}>
                 <Button>{item.label}</Button>
               </Link>
               <ActionBarSeparator
