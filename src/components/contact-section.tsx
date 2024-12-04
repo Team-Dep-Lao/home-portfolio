@@ -66,14 +66,14 @@ export default function ContactSection() {
   });
 
   return (
-    <div className="web-container flex gap-4">
-      <div className="flex-1 p-4">
+    <div className="web-container flex sm:flex-row flex-col gap-4" id="contact">
+      <div className="flex-1 p-4 sm:flex hidden">
         <Image
           src={"/hand-model.png"}
           className="hover:scale-90 transition-all duration-500 aspect-square"
         />
       </div>
-      <div className="flex-1 flex p-6 flex-col gap-4 py-12">
+      <div className="flex-1 flex p-6 flex-col gap-4 sm:py-12 py-6">
         <div className="text-5xl font-bold capitalize">Get in touch</div>
         <form
           onSubmit={onSubmit}

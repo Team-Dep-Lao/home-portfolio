@@ -1,5 +1,4 @@
-import { Image, Link } from "@chakra-ui/react";
-import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { ArrowUp, Facebook, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ActionBarContent,
@@ -10,19 +9,39 @@ import { Fragment, useMemo } from "react";
 import useSizeScreen from "@/hooks/useSizeScreen";
 import { useScroll } from "@/hooks/useScroll";
 import { cn } from "@/lib/utils";
+import { Avatar } from "./ui/avatar";
 
 const items = [
   {
     label: "Home",
-    link: "/#",
+    link: "home",
   },
   {
     label: "Skills",
-    link: "/#skills",
+    link: "skills",
   },
   {
     label: "Projects",
-    link: "/#projects",
+    link: "projects",
+  },
+  {
+    label: "Contact",
+    link: "contact",
+  },
+];
+
+const subItems = [
+  {
+    label: "Home",
+    link: "home",
+  },
+  {
+    label: "Skills",
+    link: "skills",
+  },
+  {
+    label: "Projects",
+    link: "projects",
   },
 ];
 
@@ -46,6 +65,13 @@ export default function Header() {
   const { isAtTop, isScrollingUp } = useScroll();
   const isMobile = useMemo(() => width < 640, [width]);
 
+  const onNavigate = (link: string) => {
+    const element = document.querySelector(`#${link}`); // Tìm phần tử mục tiêu
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" }); // Cuộn mượt
+    }
+  };
+
   return (
     <header
       className={cn([
@@ -54,31 +80,26 @@ export default function Header() {
       ])}
     >
       <div className="web-container justify-between sm:flex hidden items-center py-4">
-        <Image
-          src="https://bit.ly/sage-adebayo"
-          alt="logo"
-          className="aspect-square rounded-full size-14 "
-        />
+        <Avatar name="Ken Dev" src="" className="size-14" />
         <div className="flex flex-row items-center">
-          {items.map((item, idx) => (
-            <Link
-              href={item.link}
+          {subItems.map((item, idx) => (
+            <Button
+              onClick={() => onNavigate(item.link)}
               className={cn([
-                "rounded-md hover:shadow-md hover:text-gray-400 p-4",
+                "rounded-md hover:shadow-md hover:text-blue-400 shadow-blue-400 p-4",
                 !isAtTop ? "text-black" : "text-white",
               ])}
               key={idx}
-              scrollBehavior={"smooth"}
             >
               {item.label}
-            </Link>
+            </Button>
           ))}
         </div>
         <div className="flex flex-row items-center gap-2">
           {socials.map((social, idx) => (
-            <Link
+            <div
               key={idx}
-              href={social.link}
+              onClick={() => onNavigate(social.link)}
               className={cn([
                 "border rounded-full p-1",
                 isAtTop ? "border-white" : "border-black",
@@ -87,10 +108,11 @@ export default function Header() {
               <social.icon
                 className={cn([isAtTop ? "stroke-white" : " stroke-black"])}
               />
-            </Link>
+            </div>
           ))}
         </div>
         <Button
+          onClick={() => onNavigate("contact")}
           className={cn([
             "font-bold p-4 rounded-none border  hover:text-gray-400 hover:border-gray-400 bg-transparent hover:bg-transparent active:bg-transparent",
             isAtTop ? "border-white text-white" : "text-black border-black",
@@ -99,13 +121,18 @@ export default function Header() {
           Let Connect
         </Button>
       </div>
-      <ActionBarRoot open={isMobile && !isScrollingUp}>
-        <ActionBarContent>
+      <ActionBarRoot open={isMobile}>
+        <ActionBarContent
+          className={cn([
+            "translate-y-[400px] transition-all duration-700",
+            !isScrollingUp ? "translate-y-0" : "translate-y-[400px]",
+          ])}
+        >
           {items.map((item, idx) => (
             <Fragment key={idx}>
-              <Link href={item.link} scrollBehavior={"smooth"}>
-                <Button>{item.label}</Button>
-              </Link>
+              <Button onClick={() => onNavigate(item.link)}>
+                {item.label}
+              </Button>
               <ActionBarSeparator
                 className={cn([idx === items.length - 1 ? "hidden" : "flex"])}
               />
@@ -113,12 +140,24 @@ export default function Header() {
           ))}
         </ActionBarContent>
       </ActionBarRoot>
+      <ActionBarRoot open={isMobile}>
+        <ActionBarContent
+          className={cn([
+            "translate-y-[400px] transition-all duration-700",
+            isScrollingUp ? "translate-y-0" : "translate-y-[400px]",
+            isAtTop ? "hidden" : ""
+          ])}
+        >
+          <Button
+            className="text-white bg-blue-500"
+            onClick={() => onNavigate("home")}
+          >
+            <ArrowUp className="size-6" />
+          </Button>
+        </ActionBarContent>
+      </ActionBarRoot>
       <div className={cn(["sm:hidden flex items-center p-2 justify-between"])}>
-        <Image
-          src="https://bit.ly/sage-adebayo"
-          alt="logo"
-          className="aspect-square rounded-full size-14 "
-        />
+        <Avatar name="Ken Dev" src="" className="size-14" />
       </div>
     </header>
   );

@@ -64,7 +64,7 @@ export default function SkillSection() {
         since the 1500s, when an unknown printer took a galley of type and
         scrambled it to make a type specimen book.
       </div>
-      <div className="grid md:grid-cols-6 sm:grid-cols-3 grid-cols-1 gap-4 mt-6">
+      <div className="grid md:grid-cols-6 grid-cols-3 gap-4 mt-6">
         {items.map((item, idx) => (
           <div key={idx} className="">
             <CircularProgress label={item.label} percentage={item.point} />

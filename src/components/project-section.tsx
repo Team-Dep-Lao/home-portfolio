@@ -3,7 +3,7 @@ import { Button, Image } from "@chakra-ui/react";
 export default function ProjectSection() {
 
   return (
-    <div className="flex flex-col items-center pt-4 pb-10 gap-4" id="projects">
+    <div className="flex flex-col items-center pt-4 pb-10 gap-4 sm:px-0 px-2" id="projects">
       <div className="sm:text-3xl text-xl font-bold">Projects</div>
       <div className="text-gray-400 text-center">
         Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -16,7 +16,7 @@ export default function ProjectSection() {
         with desktop publishing software like Aldus PageMaker including versions
         of Lorem Ipsum.
       </div>
-      <div className="grid grid-cols-3 gap-8 pt-4">
+      <div className="grid sm:grid-cols-3 grid-cols-1 gap-8 pt-4">
         {Array.from({ length: 6 }).map((_, idx) => {
           return (
             <div
