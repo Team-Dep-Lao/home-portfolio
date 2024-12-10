@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Image, Input, Textarea } from "@chakra-ui/react";
 import { Field } from "./ui/field";
 import { Button } from "./ui/button";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface FormValues {
   name: string;
@@ -11,32 +13,30 @@ interface FormValues {
   content: string;
 }
 
+const formSchema = yup.object({
+  name: yup
+    .string()
+    .required("Name is required")
+    .trim()
+    .min(3, "Name must be at least 3 characters"),
+  email: yup.string().required("Email is required").email("Email is invalid"),
+  title: yup
+    .string()
+    .required("Title is required")
+    .trim()
+    .min(3, "Title must be at least 3 characters."),
+  content: yup.string().trim().min(10, "Content is not empty."),
+});
+
 export default function ContactSection() {
   const {
     register,
     handleSubmit,
     reset,
-    setError,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({ resolver: yupResolver(formSchema) });
 
-  const onSubmit = handleSubmit(async (data) => {
-    if (data.name.trim() === "") {
-      setError("name", {
-        message: `"Name" needs at least 3 characters. The name you entered is not valid.`,
-      });
-    }
-    if (data.title.trim() === "") {
-      setError("title", {
-        message: `"Name" needs at least 5 characters. The name you entered is not valid.`,
-      });
-    }
-    if (data.content.trim() === "") {
-      setError("content", {
-        message: `"Content" cannot be empty.`,
-      });
-    }
-
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     if (!errors) {
       try {
         await axios.post(
@@ -63,7 +63,7 @@ export default function ContactSection() {
         alert("Something went wrong!");
       }
     }
-  });
+  };
 
   return (
     <div className="web-container flex sm:flex-row flex-col gap-4" id="contact">
@@ -76,64 +76,45 @@ export default function ContactSection() {
       <div className="flex-1 flex p-6 flex-col gap-4 sm:py-12 py-6">
         <div className="text-5xl font-bold capitalize">Get in touch</div>
         <form
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="grid sm:grid-cols-2 grid-cols-1 gap-6"
         >
-          <Field
-            required
-            invalid={!!errors.name}
-            errorText={errors.name?.message}
-          >
+          <Field invalid={!!errors.name} errorText={errors.name?.message}>
             <Input
               className="bg-white placeholder:text-gray-900 text-black bg-opacity-50 px-2"
               placeholder="Name"
-              {...register("name", {
-                required: "Name is required",
-                minLength: 3,
-                min: "At lease 3 characters.",
-              })}
+              {...register("name")}
             />
           </Field>
-          <Field
-            required
-            invalid={!!errors.email}
-            errorText={errors.email?.message}
-          >
+          <Field invalid={!!errors.email} errorText={errors.email?.message}>
             <Input
               placeholder="Email"
               type="email"
               autoComplete="email"
-              required
               className="bg-white placeholder:text-gray-900 text-black bg-opacity-50 px-2"
-              {...register("email", { required: "Email is invalid" })}
+              {...register("email")}
             />
           </Field>
           <Field
             invalid={!!errors.title}
             errorText={errors.title?.message}
             className="sm:col-span-2 col-span-1"
-            required
           >
             <Input
               placeholder="Title"
-              required
               className="bg-white placeholder:text-gray-900 text-black bg-opacity-50 px-2"
-              {...register("title", { required: "Title is required", min: 5 })}
+              {...register("title")}
             />
           </Field>
           <Field
             invalid={!!errors.content}
             errorText={errors.content?.message}
             className="sm:col-span-2 col-span-1"
-            required
           >
             <Textarea
-              required
               placeholder="Message"
               className="bg-white placeholder:text-gray-900 text-black bg-opacity-50 px-2 min-h-48"
-              {...register("content", {
-                required: "Content cannot be empty",
-              })}
+              {...register("content")}
             />
           </Field>
           <Button className="bg-blue-500 font-bold text-white" type="submit">
