@@ -1,4 +1,4 @@
-import { ArrowUp, Facebook, Instagram, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ActionBarContent,
@@ -140,7 +140,7 @@ export default function Header() {
           ))}
         </ActionBarContent>
       </ActionBarRoot>
-      <ActionBarRoot open={isMobile}>
+      {/* <ActionBarRoot open={isMobile}>
         <ActionBarContent
           className={cn([
             "translate-y-[400px] transition-all duration-700",
@@ -155,7 +155,7 @@ export default function Header() {
             <ArrowUp className="size-6" />
           </Button>
         </ActionBarContent>
-      </ActionBarRoot>
+      </ActionBarRoot> */}
       <div className={cn(["sm:hidden flex items-center p-2 justify-between"])}>
         <Avatar name="Ken Dev" src="" className="size-14" />
       </div>
